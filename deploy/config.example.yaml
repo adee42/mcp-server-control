@@ -1,0 +1,52 @@
+# sc-server configuration (/etc/server-control/config.yaml, mode 0600).
+# Keys are normally added with `sc-server key add`, which keeps this file's comments.
+# After editing, apply with: systemctl reload sc-server
+
+listen: ":8443"
+
+tls:
+  # Generated automatically (self-signed) on first start if missing.
+  # Print the pin for clients with: sc-server fingerprint
+  cert: /etc/server-control/tls/cert.pem
+  key: /etc/server-control/tls/key.pem
+
+limits:
+  default_timeout: 60s   # run_command when no timeout is given
+  max_timeout: 1h        # upper bound for any requested timeout
+  max_output: 1MiB       # per stream for exec; ring buffer size for jobs
+  max_file: 50MiB        # largest file read/write
+  job_retention: 24h     # finished jobs are forgotten after this
+  max_jobs: 100          # concurrently running background jobs
+
+cron_dir: /etc/cron.d    # jobs are written as server-control-<name>
+
+# Every operation (allowed or refused) is appended here as one JSON object per line.
+# Set to "off" to disable. deploy/sc-server.logrotate rotates it weekly.
+audit_log: /var/log/server-control/audit.log
+
+keys:
+  # Example: full administrative access, but only from the office network.
+  # - name: ops-admin
+  #   hash: sha256:...                     # from `sc-server key add`
+  #   scopes: [info, exec, jobs, files, services, services:manage, cron]
+  #   commands:
+  #     deny: ['^rm -rf /( |$)']           # best effort only: a shell can obfuscate
+  #   paths:
+  #     read: ["/"]
+  #     write: ["/etc/nginx", "/srv"]
+  #   services:
+  #     allow: ["*"]
+  #   ip_allow: ["10.0.0.0/8", "192.168.1.20"]
+  #   expires: 2027-06-30T00:00:00Z
+  #   rate_limit: { per_minute: 120, burst: 20 }
+  #
+  # Example: read-only monitoring. With an allowlist, commands run WITHOUT a shell and
+  # shell metacharacters are rejected, so the allowlist cannot be bypassed by chaining.
+  # - name: monitoring
+  #   hash: sha256:...
+  #   scopes: [info, exec, services]
+  #   commands:
+  #     allow: ['^uptime$', '^df( |$)', '^free( |$)', '^journalctl -u [a-z0-9@._-]+ -n [0-9]+$']
+  #   services:
+  #     allow: ["nginx", "app-*"]          # status only: no services:manage scope
+  #   rate_limit: { per_minute: 30 }

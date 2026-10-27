@@ -1,0 +1,12 @@
+/var/log/server-control/audit.log {
+	weekly
+	rotate 52
+	compress
+	delaycompress
+	missingok
+	notifempty
+	create 0600 root root
+	postrotate
+		systemctl reload sc-server >/dev/null 2>&1 || true
+	endscript
+}

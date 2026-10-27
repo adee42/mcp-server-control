@@ -1,0 +1,13 @@
+{
+  "name": "server-control",
+  "owner": {
+    "name": "adee42"
+  },
+  "plugins": [
+    {
+      "name": "server-control",
+      "source": "./plugin",
+      "description": "Remote control of Linux servers through per-key-restricted sc-server agents."
+    }
+  ]
+}

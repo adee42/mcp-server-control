@@ -1,0 +1,7 @@
+/bin/
+/plugin/bin/
+/mcpb/server/sc-mcp-*
+/mcpb/THIRD_PARTY_LICENSES.txt
+*.tmp
+/config.yaml
+/deploy/config.yaml

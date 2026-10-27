@@ -1,0 +1,14 @@
+# Shell scripts run on Linux/macOS and break with CRLF line endings, even when the
+# repository is checked out on Windows (launch.sh is packed into the MCPB bundle as is).
+*.sh                 text eol=lf
+# gofmt expects LF; with core.autocrlf, Windows checkouts would otherwise get CRLF.
+*.go                 text eol=lf
+go.mod               text eol=lf
+go.sum               text eol=lf
+Makefile             text eol=lf
+deploy/*.service     text eol=lf
+deploy/*.logrotate   text eol=lf
+
+# Prebuilt release binaries: never diff or convert them.
+bin/**               binary
+*.mcpb               binary

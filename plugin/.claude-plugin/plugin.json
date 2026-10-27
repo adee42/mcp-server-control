@@ -1,0 +1,10 @@
+{
+  "name": "server-control",
+  "version": "0.1.0",
+  "description": "Remote control of Linux servers through per-key-restricted sc-server agents: commands, background jobs, files, systemd services and cron jobs.",
+  "author": {
+    "name": "adee42"
+  },
+  "license": "MIT",
+  "keywords": ["ssh", "servers", "remote", "systemd", "cron", "ops"]
+}

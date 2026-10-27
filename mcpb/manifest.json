@@ -1,0 +1,287 @@
+{
+  "$schema": "https://raw.githubusercontent.com/modelcontextprotocol/mcpb/main/dist/mcpb-manifest.schema.json",
+  "manifest_version": "0.3",
+  "name": "server-control",
+  "display_name": "Server Control",
+  "version": "0.1.0",
+  "description": "Operate your Linux servers through per-key-restricted sc-server agents: commands, background jobs, files, systemd services and cron jobs.",
+  "long_description": "Server Control connects Claude to `sc-server` agents running on your Linux hosts. Each server enforces the policy of the API key used: scopes, command allowlists (run without a shell), path and service allowlists, IP allowlists, expiry and rate limits. Every operation is written to an audit log on the server.\n\nEnter up to five servers in the extension settings: a name, the address (host or host:port), the API key from `sudo sc-server key add` (stored as a secret) and the certificate fingerprint from `sudo sc-server fingerprint`. Leave unused slots empty. For more servers, choose a `servers.yaml` as Servers file; its entries are added to the slots.",
+  "author": {
+    "name": "adee42",
+    "url": "https://github.com/adee42"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adee42/mcp-server-control"
+  },
+  "homepage": "https://github.com/adee42/mcp-server-control",
+  "documentation": "https://github.com/adee42/mcp-server-control#readme",
+  "license": "MIT",
+  "keywords": [
+    "servers",
+    "remote",
+    "linux",
+    "systemd",
+    "cron",
+    "ops",
+    "devops"
+  ],
+  "server": {
+    "type": "binary",
+    "entry_point": "server/launch.sh",
+    "mcp_config": {
+      "command": "/bin/sh",
+      "args": [
+        "${__dirname}/server/launch.sh",
+        "serve",
+        "-from-env"
+      ],
+      "env": {
+        "SC_SERVER_1_NAME": "${user_config.server1_name}",
+        "SC_SERVER_1_ADDRESS": "${user_config.server1_address}",
+        "SC_SERVER_1_KEY": "${user_config.server1_api_key}",
+        "SC_SERVER_1_FINGERPRINT": "${user_config.server1_fingerprint}",
+        "SC_SERVER_2_NAME": "${user_config.server2_name}",
+        "SC_SERVER_2_ADDRESS": "${user_config.server2_address}",
+        "SC_SERVER_2_KEY": "${user_config.server2_api_key}",
+        "SC_SERVER_2_FINGERPRINT": "${user_config.server2_fingerprint}",
+        "SC_SERVER_3_NAME": "${user_config.server3_name}",
+        "SC_SERVER_3_ADDRESS": "${user_config.server3_address}",
+        "SC_SERVER_3_KEY": "${user_config.server3_api_key}",
+        "SC_SERVER_3_FINGERPRINT": "${user_config.server3_fingerprint}",
+        "SC_SERVER_4_NAME": "${user_config.server4_name}",
+        "SC_SERVER_4_ADDRESS": "${user_config.server4_address}",
+        "SC_SERVER_4_KEY": "${user_config.server4_api_key}",
+        "SC_SERVER_4_FINGERPRINT": "${user_config.server4_fingerprint}",
+        "SC_SERVER_5_NAME": "${user_config.server5_name}",
+        "SC_SERVER_5_ADDRESS": "${user_config.server5_address}",
+        "SC_SERVER_5_KEY": "${user_config.server5_api_key}",
+        "SC_SERVER_5_FINGERPRINT": "${user_config.server5_fingerprint}",
+        "SC_SERVERS_FILE": "${user_config.servers_file}"
+      },
+      "platform_overrides": {
+        "win32": {
+          "command": "${__dirname}/server/sc-mcp-windows-amd64.exe",
+          "args": [
+            "serve",
+            "-from-env"
+          ]
+        }
+      }
+    }
+  },
+  "user_config": {
+    "server1_name": {
+      "type": "string",
+      "title": "Server 1: Name",
+      "description": "Short name Claude uses for this server, e.g. web1. Leave the whole slot empty if unused.",
+      "required": false
+    },
+    "server1_address": {
+      "type": "string",
+      "title": "Server 1: Address",
+      "description": "Hostname or IP of the sc-server, optionally with :port (default 8443), e.g. web1.example.com or 10.0.0.5:8443.",
+      "required": false
+    },
+    "server1_api_key": {
+      "type": "string",
+      "title": "Server 1: API key",
+      "description": "Key from `sudo sc-server key add` on that server (sck_...). Stored as a secret.",
+      "required": false,
+      "sensitive": true
+    },
+    "server1_fingerprint": {
+      "type": "string",
+      "title": "Server 1: TLS fingerprint",
+      "description": "Output of `sudo sc-server fingerprint` (SHA256:AB:CD:...). Pins the server's self-signed certificate; leave empty only if the server has a CA-signed certificate.",
+      "required": false
+    },
+    "server2_name": {
+      "type": "string",
+      "title": "Server 2: Name",
+      "description": "Short name Claude uses for this server, e.g. web1. Leave the whole slot empty if unused.",
+      "required": false
+    },
+    "server2_address": {
+      "type": "string",
+      "title": "Server 2: Address",
+      "description": "Hostname or IP of the sc-server, optionally with :port (default 8443), e.g. web1.example.com or 10.0.0.5:8443.",
+      "required": false
+    },
+    "server2_api_key": {
+      "type": "string",
+      "title": "Server 2: API key",
+      "description": "Key from `sudo sc-server key add` on that server (sck_...). Stored as a secret.",
+      "required": false,
+      "sensitive": true
+    },
+    "server2_fingerprint": {
+      "type": "string",
+      "title": "Server 2: TLS fingerprint",
+      "description": "Output of `sudo sc-server fingerprint` (SHA256:AB:CD:...). Pins the server's self-signed certificate; leave empty only if the server has a CA-signed certificate.",
+      "required": false
+    },
+    "server3_name": {
+      "type": "string",
+      "title": "Server 3: Name",
+      "description": "Short name Claude uses for this server, e.g. web1. Leave the whole slot empty if unused.",
+      "required": false
+    },
+    "server3_address": {
+      "type": "string",
+      "title": "Server 3: Address",
+      "description": "Hostname or IP of the sc-server, optionally with :port (default 8443), e.g. web1.example.com or 10.0.0.5:8443.",
+      "required": false
+    },
+    "server3_api_key": {
+      "type": "string",
+      "title": "Server 3: API key",
+      "description": "Key from `sudo sc-server key add` on that server (sck_...). Stored as a secret.",
+      "required": false,
+      "sensitive": true
+    },
+    "server3_fingerprint": {
+      "type": "string",
+      "title": "Server 3: TLS fingerprint",
+      "description": "Output of `sudo sc-server fingerprint` (SHA256:AB:CD:...). Pins the server's self-signed certificate; leave empty only if the server has a CA-signed certificate.",
+      "required": false
+    },
+    "server4_name": {
+      "type": "string",
+      "title": "Server 4: Name",
+      "description": "Short name Claude uses for this server, e.g. web1. Leave the whole slot empty if unused.",
+      "required": false
+    },
+    "server4_address": {
+      "type": "string",
+      "title": "Server 4: Address",
+      "description": "Hostname or IP of the sc-server, optionally with :port (default 8443), e.g. web1.example.com or 10.0.0.5:8443.",
+      "required": false
+    },
+    "server4_api_key": {
+      "type": "string",
+      "title": "Server 4: API key",
+      "description": "Key from `sudo sc-server key add` on that server (sck_...). Stored as a secret.",
+      "required": false,
+      "sensitive": true
+    },
+    "server4_fingerprint": {
+      "type": "string",
+      "title": "Server 4: TLS fingerprint",
+      "description": "Output of `sudo sc-server fingerprint` (SHA256:AB:CD:...). Pins the server's self-signed certificate; leave empty only if the server has a CA-signed certificate.",
+      "required": false
+    },
+    "server5_name": {
+      "type": "string",
+      "title": "Server 5: Name",
+      "description": "Short name Claude uses for this server, e.g. web1. Leave the whole slot empty if unused.",
+      "required": false
+    },
+    "server5_address": {
+      "type": "string",
+      "title": "Server 5: Address",
+      "description": "Hostname or IP of the sc-server, optionally with :port (default 8443), e.g. web1.example.com or 10.0.0.5:8443.",
+      "required": false
+    },
+    "server5_api_key": {
+      "type": "string",
+      "title": "Server 5: API key",
+      "description": "Key from `sudo sc-server key add` on that server (sck_...). Stored as a secret.",
+      "required": false,
+      "sensitive": true
+    },
+    "server5_fingerprint": {
+      "type": "string",
+      "title": "Server 5: TLS fingerprint",
+      "description": "Output of `sudo sc-server fingerprint` (SHA256:AB:CD:...). Pins the server's self-signed certificate; leave empty only if the server has a CA-signed certificate.",
+      "required": false
+    },
+    "servers_file": {
+      "type": "file",
+      "title": "Servers file (optional)",
+      "description": "A servers.yaml for more servers than the five slots above, e.g. one written by `sc-mcp add`. Its servers are added to the slots and it is re-read on every request, so edits apply without restarting.",
+      "required": false
+    }
+  },
+  "tools": [
+    {
+      "name": "list_servers",
+      "description": "List the configured servers."
+    },
+    {
+      "name": "server_info",
+      "description": "Host facts and the scopes of the API key in use."
+    },
+    {
+      "name": "run_command",
+      "description": "Run a command and wait for its exit code and output."
+    },
+    {
+      "name": "start_job",
+      "description": "Start a long-running command in the background."
+    },
+    {
+      "name": "job_status",
+      "description": "Status and incremental output of a background job."
+    },
+    {
+      "name": "list_jobs",
+      "description": "List background jobs on a server."
+    },
+    {
+      "name": "kill_job",
+      "description": "Stop a background job."
+    },
+    {
+      "name": "read_file",
+      "description": "Read a text file on a server."
+    },
+    {
+      "name": "write_file",
+      "description": "Create or overwrite a file on a server (atomic)."
+    },
+    {
+      "name": "list_dir",
+      "description": "List a directory on a server."
+    },
+    {
+      "name": "download_file",
+      "description": "Copy a file from a server to this machine."
+    },
+    {
+      "name": "upload_file",
+      "description": "Copy a file from this machine to a server."
+    },
+    {
+      "name": "list_services",
+      "description": "List systemd services the key may see."
+    },
+    {
+      "name": "service_status",
+      "description": "State of a systemd unit plus recent journal lines."
+    },
+    {
+      "name": "service_action",
+      "description": "Start, stop, restart, reload, enable or disable a unit."
+    },
+    {
+      "name": "list_cron",
+      "description": "List cron jobs managed by server-control."
+    },
+    {
+      "name": "set_cron",
+      "description": "Create or replace a named cron job."
+    },
+    {
+      "name": "delete_cron",
+      "description": "Delete a cron job created by set_cron."
+    }
+  ],
+  "compatibility": {
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ]
+  }
+}

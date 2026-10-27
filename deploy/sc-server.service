@@ -1,0 +1,18 @@
+[Unit]
+Description=server-control remote agent (sc-server)
+Documentation=https://github.com/adee42/mcp-server-control
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Runs as root so it can manage systemd units and /etc/cron.d. Restrict what each API
+# key may do with scopes, allowlists and path rules in the config instead.
+ExecStart=/usr/local/bin/sc-server serve -config /etc/server-control/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=2
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

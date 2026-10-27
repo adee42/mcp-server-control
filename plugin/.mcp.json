@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "server-control": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/sc-mcp",
+      "args": ["serve"]
+    }
+  }
+}
